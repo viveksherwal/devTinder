@@ -1,29 +1,35 @@
 const express = require("express");
 const app = express();
 
-// app.use("/user",(req,res)=>{
-//     res.send("hhahahaahhhah");
-// });
+//app.use("/route",rh,[rh2,rh3],rh4,rh5)
 
-//this will only handle get call to /user
-app.get("/user",(req,res)=>{
-    res.send({firstName : "bhes",lastname : "ki tang"});
-});
-
-app.post("/user",(req,res)=>{
-    //saving data to db
-    res.send("data is succesfully saved to the database");
-});
-
-app.delete("/user",(req,res)=>{
-    res.send("delete bhes");
-});
-
-//thsi will match all the http method api calls to /test
-app.use("/test",(req,res)=>{
-    res.send("hello from server ");
-});
-
+app.get(
+    "/user",
+    (req,res,next)=>{
+        console.log("handling the route user !!");
+        next();
+    },
+    (req,res,next)=>{
+        console.log("handling the route user 1 !!");
+        //res.send("2nd response");
+        next();
+    },
+    (req,res,next)=>{
+        console.log("handling the route user 2 !!");
+        //res.send("2nd response");
+        next();
+    },
+    (req,res,next)=>{
+        console.log("handling the route user 3 !!");
+        //res.send("3nd response");
+        next();
+    },
+    (req,res,next)=>{
+        console.log("handling the route user 4 !!");
+        res.send("4nd response");
+        next();
+    }
+)
 app.listen(7777,()=>{
     console.log("server is seccussfully listening on port 7777....");
 });
