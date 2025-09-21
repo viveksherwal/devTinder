@@ -1,26 +1,28 @@
 const express = require("express");
 const app = express();
+const connectDB = require("./config/database"); 
+const User = require("./models/user");
 
-const {adminauth,userauth} = require("./middlewares/auth");
+app.post("/signup",async(req,res)=>{
+    //creating a new instance of the user model
+    const user = new User({
+        firstName:"akshay",
+        lastName:"saini",
+        emailId:"akshay@saini.com",
+        password:"akshay@123",
+    });
 
-app.use("/admin",adminauth);
-
-app.post("/user/login",(req,res)=>{
-    res.send("user logged in successfully");
+    await user.save();
+    res.send("user added successfully");
 });
 
-app.get("/user",userauth,(req,res)=>{
-    res.send("user data sent");
-});
-
-app.get("/admin/getAllData",(req,res)=>{
-    res.send("all data sent");
+connectDB().then(()=>{
+    console.log("database connection established....");
 })
-
-app.get("/admin/ ",(req,res)=>{
-    res.send("delete all data sent");
+.catch((err)=>{
+    console.log("database cannot be connected"); 
 })
 
 app.listen(7777,()=>{
-    console.log("server is seccussfully listening on port 7777....");
+    console.log("server is eccussfully listening on port 7777....");
 });
