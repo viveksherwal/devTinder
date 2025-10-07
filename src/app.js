@@ -1,25 +1,28 @@
 const express = require("express");
 const app = express();
 const connectDB = require("./config/database");
+const cookieParser = require("cookie-parser");
 const User = require("./models/user");
 
-app.use(express.json()); //a middleware that  read the dnamic data and convert it to json readible data and then attach it to the req.body so we can read it;
+app.use(express.json()); //a middleware that  read the   dynamic data and convert it to json readible data and then attach it to the req.body so we can read it;
+app.use(cookieParser());
 
-app.post("/signup", async (req, res) => {
-  //creating a new instance of the user model
-  // const user = new User({
-  //     firstName:"akshay",
-  //     lastName:"saini",
-  //     emailId:"akshay@saini.com",
-  //     password:"akshay@123",
-  // });
+const authRouter = require("./routes/auth");
+const profileRouter = require("./routes/profile");
+const requestRouter = require("./routes/requests");
 
-  //dynamic data............
-  const user = new User(req.body);
+app.use("/",authRouter);
+app.use("/",profileRouter);
+app.use("/",requestRouter);
 
-  await user.save();
-  res.send("user added successfully");
-});
+// ***********************************************************************************************************
+// -->login api
+
+
+
+// *********************************************************************
+// jwt = jason web token(3-parts = header,payload,signature)
+
 // ***********************************************************************
 //get user by email
 app.get("/user", async (req, res) => {
