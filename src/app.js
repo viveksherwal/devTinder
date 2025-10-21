@@ -85,6 +85,11 @@ app.patch("/user",async(req,res)=>{
   }
 });
 
+// Test route
+app.post("/test", (req, res) => {
+  res.send("test route working");
+});
+
 connectDB()
   .then(() => {
     console.log("database connection established....");
@@ -96,3 +101,4 @@ connectDB()
 app.listen(7777, () => {
   console.log("server is eccussfully listening on port 7777....");
 });
+  
