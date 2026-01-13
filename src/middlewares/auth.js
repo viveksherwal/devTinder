@@ -6,7 +6,7 @@ try{
   const cookies = req.cookies;
   const {token} = cookies;
   if(!token){
-    throw new Error("invalid token !!!!!!!");
+    return res.status(401).send("please login first");
   }
   const decodeMessage = await jwt.verify(token,"bhes@123")
   const{_id} = decodeMessage;

@@ -36,12 +36,20 @@ authRouter.post("/signup", async (req, res) => {
   //dynamic data............
   // const user = new User(req.body);//bad way to create a new user
 
-  await user.save();
-  res.send("user added successfully");
+  const savedUser = await user.save();
+  const token = await savedUser.getJwt();
+  
+  res.cookie("token",token,{
+    expires:new Date(Date.now() + 8*3600000),
+  });
+
+  res.json({ message: "user added successfully",data:savedUser });
   }catch(err){
     res.status(400).send("error:" + err.message)
   }
 });   
+
+
 
 authRouter.post("/login", async (req, res) => {
   try {
@@ -67,9 +75,9 @@ authRouter.post("/login", async (req, res) => {
       res.cookie("token",token,{
         expires:new Date(Date.now() + 8*3600000),
       }); 
-      res.send("login successful!!!");
+      res.send(user);
     }else{
-      res.send("invalid credentials");
+      throw new Error("invalid credentials");
     }
   } catch (err) {
     res.status(400).send("ERROR : " + err.message);
@@ -82,4 +90,4 @@ authRouter.post("/logout",async(req,res)=>{
     });
     res.send("logout Successful!!");
 });
-module.exports = authRouter;
+module.exports = authRouter; 

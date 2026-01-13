@@ -3,17 +3,31 @@ const app = express();
 const connectDB = require("./config/database");
 const cookieParser = require("cookie-parser");
 const User = require("./models/user");
+const cors = require("cors");
 
+
+app.use(cors({
+origin:["http://localhost:5173", "http://localhost:5174", "http://localhost:5175"],
+credentials:true,
+}
+));
 app.use(express.json()); //a middleware that  read the   dynamic data and convert it to json readible data and then attach it to the req.body so we can read it;
 app.use(cookieParser());
 
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/requests");
+const userRouter = require("./routes/user");
 
+console.log("Loading routes...");
 app.use("/",authRouter);
+console.log("Auth routes loaded");
 app.use("/",profileRouter);
+console.log("Profile routes loaded");
 app.use("/",requestRouter);
+console.log("Request routes loaded");
+app.use("/",userRouter);
+console.log("User routes loaded");
 
 // ***********************************************************************************************************
 // -->login api
@@ -86,8 +100,8 @@ app.patch("/user",async(req,res)=>{
 });
 
 // Test route
-app.post("/test", (req, res) => {
-  res.send("test route working");
+app.get("/test", (req, res) => {
+  res.json({ message: "Server is working!", timestamp: new Date() });
 });
 
 connectDB()

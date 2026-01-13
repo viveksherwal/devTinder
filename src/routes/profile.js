@@ -6,7 +6,7 @@ const { validateEditProfileData } = require("../utils/validation");
 const validator = require("validator");
 
 // 🟢 GET profile (for logged-in user)
-profileRouter.get("/profile", userauth, async (req, res) => {
+profileRouter.get("/profile/view", userauth, async (req, res) => {
   try {
     const user = req.user;
     res.send(user);
@@ -31,7 +31,11 @@ profileRouter.patch("/profile/edit", userauth, async (req, res) => {
 
     await loggedInUser.save();
 
-    res.send(`${loggedInUser.firstName}, your profile has been updated successfully!`);
+    res.json({
+      message: `${loggedInUser.firstName}, your profile has been updated successfully!`,
+      data: loggedInUser,
+    });
+
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
   }

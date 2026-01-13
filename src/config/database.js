@@ -14,7 +14,7 @@ const mongoose = require("mongoose");
 async function connectDB() {
   try {
     await mongoose.connect(
-      "mongodb+srv://viveksherwal:Kumar1234$@viveksherwal.wqrkn7e.mongodb.net/devTinder"
+      "mongodb+srv://viveksherwal:devTinder1234@viveksherwal.wqrkn7e.mongodb.net/devTinder"
       // No extra TLS options needed
     );
     console.log("Database connected successfully!");
