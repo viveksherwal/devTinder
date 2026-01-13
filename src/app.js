@@ -19,15 +19,10 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/requests");
 const userRouter = require("./routes/user");
 
-console.log("Loading routes...");
 app.use("/",authRouter);
-console.log("Auth routes loaded");
 app.use("/",profileRouter);
-console.log("Profile routes loaded");
 app.use("/",requestRouter);
-console.log("Request routes loaded");
 app.use("/",userRouter);
-console.log("User routes loaded");
 
 // ***********************************************************************************************************
 // -->login api
