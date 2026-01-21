@@ -6,17 +6,15 @@
 
 // module.exports = connectDB;
 
-
 // config/database.js
 // config/database.js
 const mongoose = require("mongoose");
 
 async function connectDB() {
   try {
-    await mongoose.connect(
-      "mongodb+srv://viveksherwal:devTinder1234@viveksherwal.wqrkn7e.mongodb.net/devTinder"
-      // No extra TLS options needed
-    );
+      await mongoose.connect(
+        process.env.DB_CONNECTION_SECRET, // No extra TLS options needed
+      );
     console.log("Database connected successfully!");
   } catch (err) {
     console.error("Database connection failed:", err);
@@ -24,4 +22,3 @@ async function connectDB() {
 }
 
 module.exports = connectDB;
-

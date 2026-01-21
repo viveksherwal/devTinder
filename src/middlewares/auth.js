@@ -8,7 +8,7 @@ try{
   if(!token){
     return res.status(401).send("please login first");
   }
-  const decodeMessage = await jwt.verify(token,"bhes@123")
+  const decodeMessage = await jwt.verify(token,process.env.JWT_SECRET)
   const{_id} = decodeMessage;
 
   const user = await User.findById(_id);
