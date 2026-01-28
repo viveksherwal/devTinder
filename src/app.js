@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const User = require("./models/user");
 const cors = require("cors");
 require("dotenv").config();
+require("./utils/cronjob.js");
 
 
 app.use(cors({
