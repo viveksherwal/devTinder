@@ -35,7 +35,6 @@ profileRouter.patch("/profile/edit", userauth, async (req, res) => {
       message: `${loggedInUser.firstName}, your profile has been updated successfully!`,
       data: loggedInUser,
     });
-
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
   }
@@ -54,7 +53,10 @@ profileRouter.patch("/profile/password", userauth, async (req, res) => {
     const loggedInUser = req.user;
 
     // Compare old password with hashed one
-    const isMatch = await bcrypt.compare(currentPassword, loggedInUser.password);
+    const isMatch = await bcrypt.compare(
+      currentPassword,
+      loggedInUser.password,
+    );
     if (!isMatch) {
       throw new Error("Current password is incorrect");
     }
@@ -62,7 +64,7 @@ profileRouter.patch("/profile/password", userauth, async (req, res) => {
     // Check password strength
     if (!validator.isStrongPassword(newPassword)) {
       throw new Error(
-        "Please enter a strong password (min 8 chars, include uppercase, lowercase, number & symbol)"
+        "Please enter a strong password (min 8 chars, include uppercase, lowercase, number & symbol)",
       );
     }
 

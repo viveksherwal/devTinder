@@ -3,7 +3,7 @@ const {subDays, startOfDay, endOfDay} = require("date-fns");
 const connectionRequestModel = require("../models/connectionRequest");
 const sendEmail = require("./sendEmail");
 
-cron.schedule("1 1 * * *", async () => {
+cron.schedule("30 2 * * *", async () => {
     try{
         const yesterday = subDays(new Date(),1);
         const yesterdayStart = startOfDay(yesterday);
