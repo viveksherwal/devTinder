@@ -5,7 +5,7 @@ const razorpay = require("../utils/razorpay");
 const Payment = require("../models/payment");
 const { membershipAmount } = require("../utils/constants");
 const { validateWebhookSignature } = require("razorpay/dist/utils/razorpay-utils");
-const uder = require("../models/user");  
+const user = require("../models/user");  
 
 paymentRouter.post("/payment/create", userauth, async (req, res) => {
   try {
@@ -51,8 +51,9 @@ paymentRouter.post("/payment/create", userauth, async (req, res) => {
 
 paymentRouter.post("/payment/webhook", async (req, res) => {
   try {
-
-    const webhookSignature = req.headers("x-razorpay-signature");
+    console.log("webhook called");
+    const webhookSignature = req.get("x-razorpay-signature");
+    console.log("webhook singature:", webhookSignature);
 
     const isWebhookValid = validateWebhookSignature(
       JSON.stringify(req.body),
@@ -61,8 +62,10 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
     );
 
     if(!isWebhookValid) {
-      return res.status(400).send("Invalid webhook signature");
+      console.log("Invalid webhook signature");
+      return res.status(400).send   ("Invalid webhook signature");
     } 
+    console.log("webhook signature is valid");
 
     //update my payment status in Db
     const paymentDetails = req.body.payload.payment.entity;
@@ -70,11 +73,13 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
     const payment = await Payment.findOne({ orderId: paymentDetails.order_id });
     payment.status = paymentDetails.status;
     await payment.save();
+    console.log("payment status updated in db");
 
-    const user = await User.findById({_id: payment.userId});
-    user.isPremium = true;
-    user.membershipType = payment.notes.membershipType;
-    await user.save();
+    const userData = await user.findById({_id: payment.userId});
+    userData.isPremium = true;
+    userData.membershipType = paymentDetails.notes.membershipType;
+    await userData.save();
+    console.log("user membership updated in db");
 
     // if(req.body.event === "payment.captured") {
     // }
