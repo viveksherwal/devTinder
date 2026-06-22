@@ -4,6 +4,8 @@ const connectDB = require("./config/database");
 const cookieParser = require("cookie-parser");
 const User = require("./models/user");
 const cors = require("cors");
+const http  = require("http");
+
 require("dotenv").config();
 require("./utils/cronjob.js");
 
@@ -21,13 +23,19 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/requests");
 const userRouter = require("./routes/user");
 const paymentRouter = require("./routes/Payment");
+const initializeSocket = require("./utils/socket");
+const chatRouter = require("./routes/chat");
 
 app.use("/",authRouter);
 app.use("/",profileRouter);
 app.use("/",requestRouter);
 app.use("/",userRouter);
 app.use("/",paymentRouter);
+app.use("/",chatRouter);
 
+const server = http.createServer(app);
+initializeSocket(server);
+ 
 // ***********************************************************************************************************
 // -->login api
 
@@ -103,15 +111,25 @@ app.get("/test", (req, res) => {
   res.json({ message: "Server is working!", timestamp: new Date() });
 });
 
+// connectDB()
+//   .then(() => {
+//     console.log("database connection established....");
+//   })
+//   .catch((err) => {
+//     console.log("database cannot be connected");
+//   });
+
+// app.listen(7777, () => {
+//   console.log("server is eccussfully listening on port 7777....");
+// });
+  
 connectDB()
   .then(() => {
     console.log("database connection established....");
+    server.listen(process.env.PORT,()=>{
+      console.log(`server is eccussfully listening on port ${process.env.PORT}....`);
+    });
   })
   .catch((err) => {
     console.log("database cannot be connected");
   });
-
-app.listen(7777, () => {
-  console.log("server is eccussfully listening on port 7777....");
-});
-  
